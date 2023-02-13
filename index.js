@@ -1,16 +1,16 @@
 const fs = require('fs')
 const zlib = require('zlib')
 const  { pipeline } = require('stream')
+const { promisify } = require('util')
+  
+const promisedPipeline = promisify(pipeline)
+async function run() {
+  await promisedPipeline(
+    fs.createReadStream('./video/video.mp4'),
+    zlib.createGzip(),
+    fs.createWriteStream('./videozin.tar.gz')
+  )
+  console.log('deu certo!');
+}
 
-pipeline(
-  fs.createReadStream('./video/video.mp4'),
-  zlib.createGzip(),
-  fs.createWriteStream('./test.tar.gz'),
-  err => {
-    if(err) {
-      console.error('Deu treta', err)
-    }else {
-      console.log('bombou')
-    }
-  }
-)
+run().catch(console.error)
