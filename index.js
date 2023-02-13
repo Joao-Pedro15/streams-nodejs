@@ -1,0 +1,10 @@
+const fs = require('fs')
+const zlib = require('zlib')
+
+fs.createReadStream('./video/video.mp4')
+.on('error', console.error)
+.pipe(zlib.createGzip())
+.on('error', console.error)
+.pipe(fs.createWriteStream('./video.tar.gz'))
+.on('error', console.error)
+.on('finish', () => console.log('Done'))
