@@ -1,10 +1,16 @@
 const fs = require('fs')
 const zlib = require('zlib')
+const  { pipeline } = require('stream')
 
-fs.createReadStream('./video/video.mp4')
-.on('error', console.error)
-.pipe(zlib.createGzip())
-.on('error', console.error)
-.pipe(fs.createWriteStream('./video.tar.gz'))
-.on('error', console.error)
-.on('finish', () => console.log('Done'))
+pipeline(
+  fs.createReadStream('./video/video.mp4'),
+  zlib.createGzip(),
+  fs.createWriteStream('./test.tar.gz'),
+  err => {
+    if(err) {
+      console.error('Deu treta', err)
+    }else {
+      console.log('bombou')
+    }
+  }
+)
